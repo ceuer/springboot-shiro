@@ -46,9 +46,8 @@ public class ShiroConfig {
 		//part1 设置Shiro安全管理器
 		shiroFilterFactoryBean.setSecurityManager(shiroWebSecurityManager);
 		
-		//part2 设置自定义过滤管理器
+		//part2 设置资源权限和角色自定义过滤管理器
 		Map<String, Filter> myFilterMap = new HashMap();
-		//part2 设置资源权限自定义过滤管理器
 		myFilterMap.put("my-perms", new ShiroPermitAndOrFilter());//可以配置ShiroPermitAndOrFilter的Bean
 		myFilterMap.put("my-roles", new ShiroRoleAndOrFilter());//可以配置ShiroRoleAndOrFilter的Bean
 		//使用自定义拦截器
@@ -82,28 +81,6 @@ public class ShiroConfig {
 		
 		return shiroFilterFactoryBean;
 	}
-	
-	/**
-	 * 自定义shiro过滤器设置(my-perms my-roles)
-	 * @param shiroFilterFactoryBean
-	 */
-	// private ShiroFilterFactoryBean shiroFiltersSet(ShiroFilterFactoryBean shiroFilterFactoryBean){
-	// 	//part2 设置资源权限自定义过滤管理器
-	// 	ShiroPermitAndOrFilter shiroPermitAndOrFilter = new ShiroPermitAndOrFilter();
-	// 	Map<String, Filter> myPermitFilterMap = new HashMap();
-	// 	myPermitFilterMap.put("my-perms", shiroPermitAndOrFilter);//可以配置ShiroPermitAndOrFilter的Bean
-	// 	//使用自定义拦截器
-	// 	shiroFilterFactoryBean.setFilters(myPermitFilterMap);
-	//
-	// 	//part3 设置角色权限自定义过滤管理器
-	// 	ShiroRoleAndOrFilter shiroRoleAndOrFilter = new ShiroRoleAndOrFilter();
-	// 	Map<String, Filter> myRolesFilterMap = new HashMap();
-	// 	myRolesFilterMap.put("my-roles", shiroRoleAndOrFilter);//可以配置ShiroRoleAndOrFilter的Bean
-	// 	//使用自定义拦截器
-	// 	shiroFilterFactoryBean.setFilters(myRolesFilterMap);
-	//
-	// 	return shiroFilterFactoryBean;
-	// }
 	
 	/**
 	 * Shiro过滤内容
