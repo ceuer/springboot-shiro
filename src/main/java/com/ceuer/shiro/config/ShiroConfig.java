@@ -49,6 +49,8 @@ public class ShiroConfig {
 		ShiroAllFilter shiroAllFilter = new ShiroAllFilter();
 		Map<String, Filter> myFilterMap = new HashMap();
 		myFilterMap.put("e-perms", shiroAllFilter);//可以配置ShiroAllFilter的Bean
+		//使用自定义拦截器
+		shiroFilterFactoryBean.setFilters(myFilterMap);
 		
 		//part3 设置shiro过滤器链
 		/*
@@ -76,9 +78,6 @@ public class ShiroConfig {
 		//登录成功之后跳转到的页面
 		shiroFilterFactoryBean.setSuccessUrl("/");
 		
-		//part6	使用自定义拦截器
-		shiroFilterFactoryBean.setFilters(myFilterMap);
-		
 		return shiroFilterFactoryBean;
 	}
 	
@@ -90,16 +89,16 @@ public class ShiroConfig {
 	 */
 	private void shiroFiltersMapAll(Map<String, String> filtersMap) {
 		/* Shiro默认为anon，即不需要认证和授权就可以访问 */
-		this.shiroFiltersMapTest1(filtersMap);
+		this.shiroFiltersMapAnon(filtersMap);
 		
 		/* Shiro过滤内容测试2：只需要认证的资源：需要认证才能访问 */
-		this.shiroFiltersMapTest2(filtersMap);
+		this.shiroFiltersMapAuthc(filtersMap);
 		
 		/* Shiro过滤内容测试3：需要认证并且需要【用户资源权限】授权的资源才能访问 */
-		this.shiroFiltersMapTest3(filtersMap);
+		this.shiroFiltersMapPerms(filtersMap);
 		
 		/* Shiro过滤内容测试4：需要认证并且需要【角色资源权限】授权的资源才能访问 */
-		this.shiroFiltersMapTest4(filtersMap);
+		this.shiroFiltersMapRoles(filtersMap);
 	}
 	
 	/**
@@ -107,7 +106,7 @@ public class ShiroConfig {
 	 *
 	 * @param filtersMap 过滤器map对象
 	 */
-	private void shiroFiltersMapTest1(Map<String, String> filtersMap) {
+	private void shiroFiltersMapAnon(Map<String, String> filtersMap) {
 		// filtersMap.put("/welcome", "anon");
 		// filtersMap.put("/login.html", "anon");
 	}
@@ -117,7 +116,7 @@ public class ShiroConfig {
 	 *
 	 * @param filtersMap 过滤器map对象
 	 */
-	private void shiroFiltersMapTest2(Map<String, String> filtersMap) {
+	private void shiroFiltersMapAuthc(Map<String, String> filtersMap) {
 		// filtersMap.put("/session/userlist", "authc");
 		// filtersMap.put("/session/deptlist", "authc");
 		// /session/* 表示 /session/a 、/session/b、/session/c
@@ -130,7 +129,7 @@ public class ShiroConfig {
 	 *
 	 * @param filtersMap 过滤器map对象
 	 */
-	private void shiroFiltersMapTest3(Map<String, String> filtersMap) {
+	private void shiroFiltersMapPerms(Map<String, String> filtersMap) {
 		/*
 			保持“，”表示多个权限的并列关系，每个“，”分割的字符串可能是多个“或”权限的集合，再用“|”分割字符串，“|”需要转义。
 			filtersMap.put("/admin/channel/update", "authc,perms[channel:update]");
@@ -139,8 +138,12 @@ public class ShiroConfig {
 			一个资源对应一个用户权限：filtersMap.put("/user/add", "perms[user:add]");
 			一个资源对应多个用户权限：filtersMap.put("/user/add", "perms[]");
 		 */
+		// filtersMap.put("/user/add", "perms[user:add|admin:add]");
+		// filtersMap.put("/user/update", "perms[user:update]");
+		
 		filtersMap.put("/user/add", "e-perms[user:add|admin:add]");
-		filtersMap.put("/user/update", "e-perms[user:update]");
+		filtersMap.put("/user/update", "perms[user:update]");
+		filtersMap.put("/user/delete", "perms[user:delete]");
 	}
 	
 	/**
@@ -148,9 +151,10 @@ public class ShiroConfig {
 	 *
 	 * @param filtersMap 过滤器map对象
 	 */
-	private void shiroFiltersMapTest4(Map<String, String> filtersMap) {
-		// filtersMap.put("/dept/add", "roles[1]");
-		// filtersMap.put("/dept/update", "roles[2]");
+	private void shiroFiltersMapRoles(Map<String, String> filtersMap) {
+		filtersMap.put("/dept/add", "roles[admin]");
+		filtersMap.put("/dept/update", "roles[user]");
+		filtersMap.put("/dept/delete", "roles[delete]");
 	}
 	
 }

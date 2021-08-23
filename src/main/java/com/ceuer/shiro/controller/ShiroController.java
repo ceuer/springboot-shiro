@@ -8,6 +8,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,6 +46,11 @@ public class ShiroController {
 		return "userupdate";
 	}
 	
+	@RequestMapping("/user/delete")
+	public @ResponseBody String userdelete() {
+		return "userdelete";
+	}
+	
 	@RequestMapping("/dept/add")
 	public String deptadd() {
 		return "deptadd";
@@ -53,6 +59,11 @@ public class ShiroController {
 	@RequestMapping("/dept/update")
 	public String deptupdate() {
 		return "deptupdate";
+	}
+	
+	@RequestMapping("/dept/delete")
+	public @ResponseBody String deptdelete() {
+		return "deptdelete";
 	}
 	
 	@RequestMapping("/login.html")
