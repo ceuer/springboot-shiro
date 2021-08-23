@@ -1,9 +1,9 @@
 package com.ceuer.shiro.config;
 
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,6 +19,8 @@ public class ShiroConfig {
 	@Bean
 	public ShiroRealm shiroRealm() {
 		ShiroRealm shiroRealm = new ShiroRealm();
+		//设置加密方式
+		shiroRealm.setCredentialsMatcher(credentialsMatcher());
 		return shiroRealm;
 	}
 	
@@ -80,6 +82,21 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setSuccessUrl("/");
 		
 		return shiroFilterFactoryBean;
+	}
+	
+	/**
+	 * 配置加密方式 用来声明bean 相当于在spring配置文件中配置<bean>标签
+	 * @return
+	 */
+	@Bean
+	HashedCredentialsMatcher credentialsMatcher() {
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
+		//设置属性值
+		//设置加密算法
+		matcher.setHashAlgorithmName("MD5");
+		//设置加密次数
+		//matcher.setHashIterations(1024);
+		return matcher;
 	}
 	
 	/**

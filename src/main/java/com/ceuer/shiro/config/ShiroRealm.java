@@ -47,8 +47,10 @@ public class ShiroRealm extends AuthorizingRealm {
 			模拟 根据从token获取登录账号，然后根据登录账号从数据库查询是否存在账号信息
 			username：admin
 			password：111
+			md5 password: 698d51a19d8a121ce581499d7b701668
+			
 		 */
-		String dataBaseUserPassWord="111";//此处模拟从数据库中获取admin此账号对应的密码
+		String dataBaseUserPassWord="698d51a19d8a121ce581499d7b701668";//此处模拟从数据库中获取admin此账号对应的密码
 		String username=token.getUsername();//获取登录账号
 		return new SimpleAuthenticationInfo(username,dataBaseUserPassWord,"");
 	}
