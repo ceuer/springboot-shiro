@@ -27,6 +27,8 @@ public class ShiroRealm extends AuthorizingRealm {
 		
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 		simpleAuthorizationInfo.addStringPermission("user:add");
+		//simpleAuthorizationInfo.addStringPermission("admin:add");
+		simpleAuthorizationInfo.addStringPermission("user:update");
 		//simpleAuthorizationInfo.addRole("1");
 		
 		return simpleAuthorizationInfo;
@@ -35,7 +37,7 @@ public class ShiroRealm extends AuthorizingRealm {
 	//part1	Shiro认证方法
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-		System.out.println("执行Shiro【授权】方法-> Authentication");
+		System.out.println("执行Shiro【认证】方法-> Authentication");
 		
 		//强转AuthenticationToken对象中为UsernamePasswordToken对象，获取用户token
 		UsernamePasswordToken token=(UsernamePasswordToken)authenticationToken;
