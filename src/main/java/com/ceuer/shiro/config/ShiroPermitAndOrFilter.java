@@ -13,7 +13,7 @@ import javax.servlet.ServletResponse;
 @Component
 public class ShiroPermitAndOrFilter extends AuthorizationFilter {
 	@Override
-	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
+	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 		Subject subject = this.getSubject(request, response);
 		String[] perms = (String[]) ((String[]) mappedValue);
 		boolean isPermitted = true;
