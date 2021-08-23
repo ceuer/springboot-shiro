@@ -156,19 +156,5 @@ public class ShiroConfig {
 		filtersMap.put("/dept/delete", "roles[delete]");
 		filtersMap.put("/dept/add", "my-roles[admin,user1,user2]");
 	}
-	//
-	// @Bean
-	// public FilterRegistrationBean shiroPermsFilterRegistration(ShiroPermitAndOrFilter shiroPermitAndOrFilter) {
-	// 	FilterRegistrationBean registration = new FilterRegistrationBean(shiroPermitAndOrFilter);
-	// 	registration.setEnabled(false);
-	// 	return registration;
-	// }
-	//
-	// @Bean
-	// public FilterRegistrationBean shiroRolesFilterRegistration(ShiroRoleAndOrFilter shiroRoleAndOrFilter) {
-	// 	FilterRegistrationBean registration = new FilterRegistrationBean(shiroRoleAndOrFilter);
-	// 	registration.setEnabled(false);
-	// 	return registration;
-	// }
 	
 }
