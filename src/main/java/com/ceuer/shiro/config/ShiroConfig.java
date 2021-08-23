@@ -46,21 +46,69 @@ public class ShiroConfig {
 		 */
 		Map<String, String> filtersMap = new LinkedHashMap();
 		
-		this.shiroFiltersMapTest1(filtersMap);//Shiro过滤器内容过滤测试1：简单测试/user/add可以不受限访问，/user/update需要认证才能访问
+		/* Shiro默认为anon，即不需要认证和授权就可以访问 */
+		this.shiroFiltersMapTest1(filtersMap);
+		
+		/* Shiro过滤内容测试2：只需要认证的资源：需要认证才能访问 */
+		this.shiroFiltersMapTest2(filtersMap);
+		
+		/* Shiro过滤内容测试3：需要认证并且需要【用户资源权限】授权的资源才能访问 */
+		this.shiroFiltersMapTest3(filtersMap);
+		
+		/* Shiro过滤内容测试4：需要认证并且需要【角色资源权限】授权的资源才能访问 */
+		this.shiroFiltersMapTest4(filtersMap);
 		
 		//part3	存储shiro过滤器链内容
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filtersMap);
+		
+		//part4	设置遇到认证错误的跳转页面
+		//设置遇到未认证或者没有权限时跳转的页面，此处指定到登录页面
+		shiroFilterFactoryBean.setLoginUrl("/login.html");
+		//设置遇到未认证或者没有权限时跳转的页面，此处指定到登录页面
+		//shiroFilterFactoryBean.setUnauthorizedUrl("/login.html");
 		
 		return shiroFilterFactoryBean;
 	}
 	
 	/**
-	 * Shiro过滤器内容过滤测试1：简单测试/user/add可以不受限访问，/user/update需要认证才能访问
+	 * Shiro过滤内容测试1：Shiro默认为anon，即不需要认证和授权就可以访问
 	 * @param filtersMap 过滤器map对象
 	 */
 	private void shiroFiltersMapTest1(Map<String, String> filtersMap){
-		filtersMap.put("/user/add", "anon");
-		filtersMap.put("/user/update", "authc");
+		// filtersMap.put("/welcome", "anon");
+		// filtersMap.put("/login.html", "anon");
+	}
+	
+	/**
+	 * Shiro过滤内容测试2：只需要认证的资源：需要认证才能访问
+	 * @param filtersMap 过滤器map对象
+	 */
+	private void shiroFiltersMapTest2(Map<String, String> filtersMap){
+		// filtersMap.put("/session/userlist", "authc");
+		// filtersMap.put("/session/deptlist", "authc");
+		// /session/* 表示 /session/a 、/session/b、/session/c
+		// /session/** 表示 /session/a 、/session/a/b、/session/a/b/c
+		filtersMap.put("/session/*", "authc");
+	}
+	
+	/**
+	 * Shiro过滤内容测试3：需要认证并且需要【用户资源权限】授权的资源才能访问
+	 * @param filtersMap 过滤器map对象
+	 */
+	private void shiroFiltersMapTest3(Map<String, String> filtersMap){
+		filtersMap.put("/user/add", "perms[user:add]");
+		filtersMap.put("/user/update", "perms[user:update]");
+		
+		//filtersMap.put("/user/*", "perms[user:*]");
+	}
+	
+	/**
+	 * Shiro过滤内容测试4：需要认证并且需要【角色资源权限】授权的资源才能访问
+	 * @param filtersMap 过滤器map对象
+	 */
+	private void shiroFiltersMapTest4(Map<String, String> filtersMap){
+		filtersMap.put("/dept/add", "roles[1]");
+		filtersMap.put("/dept/update", "roles[2]");
 	}
 	
 }

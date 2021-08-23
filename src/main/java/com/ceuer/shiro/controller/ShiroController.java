@@ -20,14 +20,39 @@ public class ShiroController {
 		return "index";
 	}
 	
+	@RequestMapping("/welcome")
+	public String welcome() {
+		return "welcome";
+	}
+	
+	@RequestMapping("/session/userlist")
+	public String userlist() {
+		return "userlist";
+	}
+	
+	@RequestMapping("/session/deptlist")
+	public String deptlist() {
+		return "deptlist";
+	}
+	
 	@RequestMapping("/user/add")
-	public String add() {
-		return "add";
+	public String useradd() {
+		return "useradd";
 	}
 	
 	@RequestMapping("/user/update")
-	public String update() {
-		return "update";
+	public String userupdate() {
+		return "userupdate";
+	}
+	
+	@RequestMapping("/dept/add")
+	public String deptadd() {
+		return "deptadd";
+	}
+	
+	@RequestMapping("/dept/update")
+	public String deptupdate() {
+		return "deptupdate";
 	}
 	
 	@RequestMapping("/login.html")
