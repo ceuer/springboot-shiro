@@ -15,23 +15,30 @@ public class ShiroConfig {
 	//part1 初始化ShiroRealm对象
 	@Bean
 	public ShiroRealm shiroRealm(){
-		System.out.println("@Bean -> ShiroRealm");
-		return new ShiroRealm();
+		ShiroRealm shiroRealm = new ShiroRealm();
+		return shiroRealm;
 	}
 	
 	//part2 初始化DefaultWebSecurityManager Bean对象
 	@Bean(name = "ShiroWebSecurityManager")
-	public DefaultWebSecurityManager shiroWebSecurityManager(ShiroRealm shiroRealm){
-		System.out.println("@Bean -> ShiroWebSecurityManager");
+	public DefaultWebSecurityManager shiroWebSecurityManager(){
 		DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
-		defaultWebSecurityManager.setRealm(shiroRealm);
+		defaultWebSecurityManager.setRealm(shiroRealm());
+		
+		// //設置自定義realm.
+		// securityManager.setRealm(shiroRealm());
+		// //配置記住我
+		// securityManager.setRememberMeManager(rememberMeManager());
+		// //配置redis緩存
+		// securityManager.setCacheManager(cacheManager());
+		// //配置自定義session管理，使用redis
+		// securityManager.setSessionManager(sessionManager());
 		return defaultWebSecurityManager;
 	}
 	
 	//part3
 	@Bean
 	public ShiroFilterFactoryBean shiroFilterFactoryBean(@Qualifier("ShiroWebSecurityManager") DefaultWebSecurityManager shiroWebSecurityManager){
-		System.out.println("@Bean -> ShiroFilterFactoryBean");
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		//part1 设置Shiro安全管理器
 		shiroFilterFactoryBean.setSecurityManager(shiroWebSecurityManager);
@@ -62,10 +69,12 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filtersMap);
 		
 		//part4	设置遇到认证错误的跳转页面
-		//设置遇到未认证或者没有权限时跳转的页面，此处指定到登录页面
+		//在未认证之前用户访问了启用认证或者需要授权的资源时跳转的页面，此处指定到登录页面
 		shiroFilterFactoryBean.setLoginUrl("/login.html");
-		//设置遇到未认证或者没有权限时跳转的页面，此处指定到登录页面
-		//shiroFilterFactoryBean.setUnauthorizedUrl("/login.html");
+		//在认证了之后用户访问了需要授权的资源时跳转的页面，此处指定到登录页面
+		shiroFilterFactoryBean.setUnauthorizedUrl("/login.html");
+		//登录成功之后跳转到的页面
+		shiroFilterFactoryBean.setSuccessUrl("/");
 		
 		return shiroFilterFactoryBean;
 	}
@@ -96,10 +105,20 @@ public class ShiroConfig {
 	 * @param filtersMap 过滤器map对象
 	 */
 	private void shiroFiltersMapTest3(Map<String, String> filtersMap){
+		/*
+			保持“，”表示多个权限的并列关系，每个“，”分割的字符串可能是多个“或”权限的集合，再用“|”分割字符串，“|”需要转义。
+			filtersMap.put("/admin/channel/update", "authc,perms[channel:update]");
+			filtersMap.put("/user/delete", "perms[\"user:delete\"]");
+			/admins/user/**=perms["user:add:*,user:modify:*"]
+			filtersMap.put("/user/add","e-perms[user:add|root]");
+			一个资源对应一个用户权限：filtersMap.put("/user/add", "perms[user:add]");
+			一个资源对应多个用户权限：filtersMap.put("/user/add", "perms[]");
+		 */
 		filtersMap.put("/user/add", "perms[user:add]");
+		//filtersMap.put("/user/add", "perms[\"user:add | admin:add\"]");
 		filtersMap.put("/user/update", "perms[user:update]");
 		
-		//filtersMap.put("/user/*", "perms[user:*]");
+		//filtersMap.put("/user/add", "perms[user1:add,user2:add]");
 	}
 	
 	/**

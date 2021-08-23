@@ -1,13 +1,16 @@
 package com.ceuer.shiro.config;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 
 public class ShiroRealm extends AuthorizingRealm {
 	
@@ -15,7 +18,18 @@ public class ShiroRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 		System.out.println("执行Shiro【授权】方法-> Authorization");
-		return null;
+		//获取当前用户Subject对象
+		Subject subject= SecurityUtils.getSubject();
+		
+		//此处从当前用户中获取认证过称中传递的参数，此处是用户对象（下行代码中SimpleAuthenticationInfo参数中的对一个参数username）
+		//new SimpleAuthenticationInfo(username, dataBaseUserPassWord, "");
+		String username=(String)subject.getPrincipal();
+		
+		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+		simpleAuthorizationInfo.addStringPermission("user:add");
+		//simpleAuthorizationInfo.addRole("1");
+		
+		return simpleAuthorizationInfo;
 	}
 	
 	//part1	Shiro认证方法
