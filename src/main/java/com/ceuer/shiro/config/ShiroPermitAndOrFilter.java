@@ -2,14 +2,16 @@ package com.ceuer.shiro.config;
 
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
- * Shiro自定义资源过滤器 支持一个资源对应多个权限或的关系
+ * Shiro资源权限自定义资源过滤器 支持一个资源对应多个权限或的关系
  */
-public class ShiroAllFilter extends AuthorizationFilter {
+@Component
+public class ShiroPermitAndOrFilter extends AuthorizationFilter {
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
 		Subject subject = this.getSubject(request, response);

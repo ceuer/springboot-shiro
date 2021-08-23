@@ -3,6 +3,7 @@ package com.ceuer.shiro.config;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -46,9 +47,10 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setSecurityManager(shiroWebSecurityManager);
 		
 		//part2 设置自定义过滤管理器
-		ShiroAllFilter shiroAllFilter = new ShiroAllFilter();
 		Map<String, Filter> myFilterMap = new HashMap();
-		myFilterMap.put("e-perms", shiroAllFilter);//可以配置ShiroAllFilter的Bean
+		//part2 设置资源权限自定义过滤管理器
+		myFilterMap.put("my-perms", new ShiroPermitAndOrFilter());//可以配置ShiroPermitAndOrFilter的Bean
+		myFilterMap.put("my-roles", new ShiroRoleAndOrFilter());//可以配置ShiroRoleAndOrFilter的Bean
 		//使用自定义拦截器
 		shiroFilterFactoryBean.setFilters(myFilterMap);
 		
@@ -81,6 +83,27 @@ public class ShiroConfig {
 		return shiroFilterFactoryBean;
 	}
 	
+	/**
+	 * 自定义shiro过滤器设置(my-perms my-roles)
+	 * @param shiroFilterFactoryBean
+	 */
+	// private ShiroFilterFactoryBean shiroFiltersSet(ShiroFilterFactoryBean shiroFilterFactoryBean){
+	// 	//part2 设置资源权限自定义过滤管理器
+	// 	ShiroPermitAndOrFilter shiroPermitAndOrFilter = new ShiroPermitAndOrFilter();
+	// 	Map<String, Filter> myPermitFilterMap = new HashMap();
+	// 	myPermitFilterMap.put("my-perms", shiroPermitAndOrFilter);//可以配置ShiroPermitAndOrFilter的Bean
+	// 	//使用自定义拦截器
+	// 	shiroFilterFactoryBean.setFilters(myPermitFilterMap);
+	//
+	// 	//part3 设置角色权限自定义过滤管理器
+	// 	ShiroRoleAndOrFilter shiroRoleAndOrFilter = new ShiroRoleAndOrFilter();
+	// 	Map<String, Filter> myRolesFilterMap = new HashMap();
+	// 	myRolesFilterMap.put("my-roles", shiroRoleAndOrFilter);//可以配置ShiroRoleAndOrFilter的Bean
+	// 	//使用自定义拦截器
+	// 	shiroFilterFactoryBean.setFilters(myRolesFilterMap);
+	//
+	// 	return shiroFilterFactoryBean;
+	// }
 	
 	/**
 	 * Shiro过滤内容
@@ -141,7 +164,7 @@ public class ShiroConfig {
 		// filtersMap.put("/user/add", "perms[user:add|admin:add]");
 		// filtersMap.put("/user/update", "perms[user:update]");
 		
-		filtersMap.put("/user/add", "e-perms[user:add|admin:add]");
+		filtersMap.put("/user/add", "my-perms[user:add|admin:add]");
 		filtersMap.put("/user/update", "perms[user:update]");
 		filtersMap.put("/user/delete", "perms[user:delete]");
 	}
@@ -152,9 +175,23 @@ public class ShiroConfig {
 	 * @param filtersMap 过滤器map对象
 	 */
 	private void shiroFiltersMapRoles(Map<String, String> filtersMap) {
-		filtersMap.put("/dept/add", "roles[admin]");
 		filtersMap.put("/dept/update", "roles[user]");
 		filtersMap.put("/dept/delete", "roles[delete]");
+		filtersMap.put("/dept/add", "my-roles[admin,user1,user2]");
 	}
+	//
+	// @Bean
+	// public FilterRegistrationBean shiroPermsFilterRegistration(ShiroPermitAndOrFilter shiroPermitAndOrFilter) {
+	// 	FilterRegistrationBean registration = new FilterRegistrationBean(shiroPermitAndOrFilter);
+	// 	registration.setEnabled(false);
+	// 	return registration;
+	// }
+	//
+	// @Bean
+	// public FilterRegistrationBean shiroRolesFilterRegistration(ShiroRoleAndOrFilter shiroRoleAndOrFilter) {
+	// 	FilterRegistrationBean registration = new FilterRegistrationBean(shiroRoleAndOrFilter);
+	// 	registration.setEnabled(false);
+	// 	return registration;
+	// }
 	
 }
