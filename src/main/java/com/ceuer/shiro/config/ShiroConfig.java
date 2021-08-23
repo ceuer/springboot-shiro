@@ -153,7 +153,7 @@ public class ShiroConfig {
 	 */
 	private void shiroFiltersMapRoles(Map<String, String> filtersMap) {
 		filtersMap.put("/dept/update", "roles[user]");
-		filtersMap.put("/dept/delete", "roles[delete]");
+		//filtersMap.put("/dept/delete", "roles[delete]");
 		filtersMap.put("/dept/add", "my-roles[admin,user1,user2]");
 	}
 	
