@@ -86,7 +86,7 @@ public class ShiroConfig {
 	
 	/**
 	 * 配置加密方式 用来声明bean 相当于在spring配置文件中配置<bean>标签
-	 * @return
+	 * @return HashedCredentialsMatcher
 	 */
 	@Bean
 	HashedCredentialsMatcher credentialsMatcher() {
